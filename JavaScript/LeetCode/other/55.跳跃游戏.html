@@ -1,0 +1,19 @@
+<script>
+    /*
+    我们要判断一个下标y能不能到达，则要知道在它前面有没有下标k，且k+nums[k]>y。
+    知道这一点后我们可以创建一个值存放当前最远可到达的距离，每次遍历就比较更新这个值
+    若最远可到达距离>y的下标，则y可到达，否则不可到达
+    */
+    var canJump = function (nums) {
+        let maximum = 0;
+        for (let i = 0; i < nums.length; i++) {
+            if (i <= maximum) {
+                maximum = Math.max(maximum, i + nums[i]);
+                if (maximum >= nums.length-1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+</script>

@@ -1,0 +1,65 @@
+<script>
+    let line = read_line().split(' ');
+    let n = parseInt(line[0]);
+    let arr = read_line().split(' ');
+    arr.reduce(function (item) {
+        return parseInt(item);
+    });
+    arr.sort(function (a, b) {
+        return a - b;
+    })
+    let min = arr[0];
+    for (let i = 0; i < n; i++) {
+        if (arr[i] > min * 2) {
+            print(n - i);
+            break;
+        }
+    }
+
+    function toresult(line) {
+        let arr = line.split(' ');
+        arr.reduce(function (item) {
+            return parseInt(item);
+        });
+        arr.sort(function (a, b) {
+            return a - b;
+        })
+        let min = arr[0];
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] > min * 2) {
+                console.log(arr.length - i);
+                break;
+            }
+        }
+    }
+
+    let line = read_line().split(' ');
+    let n = parseInt(line[0]);
+    let arr = read_line().split(' ');
+    arr.reduce(function (item) {
+        return parseInt(item);
+    });
+    arr.sort(function (a, b) {
+        return a - b;
+    })
+    let min = arr[0];
+    let num1 = 0;
+    for (let i = 1; i < n; i++) {
+        if (arr[i] > min * 2) {
+            num1 = n-i
+            break;
+        }
+    }
+    arr.sort(function(a,b){
+        return b - a;
+    })
+    let max = arr[0];
+    let num2 = 0;
+    for (let i = 1; i < n; i++) {
+        if (arr[i]*2 < max) {
+            num1 = n-i
+            break;
+        }
+    }
+    num1 < num2 ? print(num1):print(num2);
+</script>

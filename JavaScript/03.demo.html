@@ -1,0 +1,27 @@
+<script>
+    let line = read_line().split(' ');
+    let T = parseInt(line[0]);
+    for (let i = 0; i < T; i++) {
+        let line = read_line().split(' ');
+        let n = parseInt(line[0]);
+        let arr = read_line().split(' ');
+        let start = 0, end = 0;
+        for (let j = 1; j <= n; j++) {
+            if (parseInt(arr[j]) !== j) {
+                if (start === 0) {
+                    start = j;
+                } else {
+                    end = j;
+                }
+            }
+        }
+        let count = end - start + 1;
+        let stap = parseInt(arr[start]) - start;
+        let result = count - stap;
+        if (start === 0) {
+            print(start);
+        } else {
+            print(start + ' ' + end + ' ' + result);
+        }
+    }
+</script>

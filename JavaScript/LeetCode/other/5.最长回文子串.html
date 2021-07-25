@@ -1,0 +1,57 @@
+<script>
+    // 这个暴力解法，超时了
+    // var longestPalindrome = function (s) {
+    //     let str = new String(s);
+    //     let start = 0;
+    //     let newStr;
+    //     let reverseStr;
+
+    //     for (let size = str.length; size > 0; size--) {
+    //         for (let start = 0,len = size; start < str.length - size + 1; start++,len++) {
+    //             newStr = str.slice(start, len);
+    //             reverseStr = newStr.split("").reverse().join("");
+    //             if (newStr.localeCompare(reverseStr) === 0) {
+    //                 return newStr;
+    //             }
+    //         }
+    //     }
+    //     return "";
+    // };
+
+    // 1.从一个字符出发向两边判断，如‘cabacd’，从i出发左右两字符(i-1,i+1)相等
+    // 则继续往两边判断，直到越界或两字符不等
+    // 2.如果是最大回文子串是偶数字符串如‘cdccda’，没有中间字符，则稍微转变一下，
+    // 从(i,i+1)开始判断，直到越界或两字符不等
+    // 3.设置一个maxLength记录最大子串的长度
+    // 4.遍历字符串，对每个字符重复步骤1和2
+    var longestPalindrome = function (s) {
+        // 特殊情况判断
+        if (s.length < 2) {
+            return s;
+        }
+
+        // 上面字符串长度为0和1的情况已经返回了，之后子回文串最小长度也是1
+        let maxLength = 1, start = 0;
+        let left = 0, right = s.length;
+
+        // 这个算法的正式名字
+        function expendAroundCenter(left, right) {
+            //符合条件就一直从中心往两边扩展
+            while (left >= 0 && left <= s.length && s[left] === s[right]) {
+                if (right - left + 1 > maxLength) {
+                    maxLength = right - left + 1;
+                    start = left;
+                }
+                left -= 1;
+                right += 1;
+            }
+        }
+
+        for (let i = 0; i < s.length; i++) {
+            expendAroundCenter(i - 1, i + 1);
+            expendAroundCenter(i, i + 1);
+        }
+
+        return s.substring(start, start + maxLength);
+    }
+</script>

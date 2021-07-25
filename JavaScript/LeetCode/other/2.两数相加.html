@@ -1,0 +1,36 @@
+<script>
+    var addTwoNumbers = function (l1, l2) {
+        let dummy = new ListNode();
+        let curr = dummy;
+        // 进位
+        let carry = 0;
+
+        // 要考虑l1和l2不一样长的情况
+        while (l1 !== null || l2 !== null) {
+            // 当前位上的和
+            let sum = 0;
+            if (l1 !== null) {
+                sum += l1.val;
+                l1 = l1.next;
+            }
+            if (l2 !== null) {
+                sum += l2.val;
+                l2 = l2.next;
+            }
+
+            // 进位
+            sum += carry;
+            curr.next = new ListNode(sum % 10);
+            carry = Math.floor(sum / 10);
+            curr = curr.next;
+        }
+
+        // 最后判断一次要不要进位
+        if (carry > 0) {
+            curr.next = new ListNode(carry);
+        }
+
+        // 返回的是头结点的下一个节点
+        return dummy.next;
+    };
+</script>

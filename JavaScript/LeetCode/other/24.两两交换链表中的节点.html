@@ -1,0 +1,27 @@
+<script>
+    var swapPairs = function (head) {
+        if (head === null || head.next === null) {
+            return head;
+        }
+        let dummy = new ListNode(-1, head);
+        let i = dummy, j = dummy.next;
+        let k = j.next;
+
+        while (j !== null && k !== null) {
+            j.next = k.next;
+            k.next = j;
+            i.next = k;
+
+            i = j;
+            if (i !== null) {
+                j = i.next;
+
+            }
+            if (j !== null) {
+                k = j.next;
+            }
+        }
+
+        return dummy.next;
+    };
+</script>

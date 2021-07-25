@@ -1,0 +1,51 @@
+<script>
+    // 1.设置两个指针target和end，当end遍历了n个节点时，target也开始遍历
+    // 2.当end遍历到最后一个节点时，target也遍历到目标节点了，删除此节点
+    // 3.要删除节点，得再设置一个指针font指向此节点的头一个节点
+    // 4.返回链表
+
+    // 没考虑边界值，如head=[1],n=1
+    // var removeNthFromEnd = function (head, n) {
+    //     let target = head, end = head, font = head;
+    //     let num = 0;
+    //     while (end.next !== null) {
+    //         end = end.next;
+    //         num++;
+
+    //         if (num >= n) {
+    //             target = target.next;
+    //             if (num > n) {
+    //                 font = font.next;
+    //             }
+    //         }
+    //     }
+    //     // 删除节点
+    //     font.next = target.next;
+    //     return head;
+    // };
+
+    // 进阶优化：可以不设置fonr指针，用下面两种方式解决删除问题：
+    // 1.end走了n+1位后target再开始走，删除操作为：target.next=target.next.next;
+    // 2.end还是走n位后target再开始走，但修改循环判断，让end不走到走后，而是走到最后的前一个，再执行同上的删除操作
+    // 考虑边界值情况：设置dummy节点next指向head，end和target都指向dummy
+    var removeNthFromEnd = function (head, n) {
+        let dummy = new ListNode();
+        dummy.next = head;
+
+        let target = dummy;
+        let end = dummy;
+
+        for (let i = 0; i <= n; i++) {
+            end = end.next;
+        }
+
+        while (end !== null) {
+            end = end.next;
+            target = target.next;
+        }
+
+        target.next = target.next.next;
+
+        return dummy.next;
+    }
+</script>

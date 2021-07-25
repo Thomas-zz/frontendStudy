@@ -1,0 +1,36 @@
+<script>
+    // 做法一
+    // var twoSum = function (nums, target) {
+    //     let ind1 = 0, ind2 = 1;
+    //     let arr = [];
+    //     for (let i = 0; i < nums.length; i++) {
+    //         if (Math.abs(nums[i]) > Math.abs(target)) {
+    //             continue;
+    //         } else {
+    //             ind1 = i;
+    //             for (let j = i + 1; j < nums.length; j++) {
+    //                 if (nums[j] + nums[i] == target) {
+    //                     ind2 = j;
+    //                     arr.push(ind1);
+    //                     arr.push(ind2);
+    //                     return arr;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+
+    // 做法二
+    var twoSum = function(nums, target){
+        const map = new Map();
+        for(let i = 0;i<nums.length;i++){
+            const num = target-nums[i];
+            if(map.has(num)){
+                return [map.get(num),i];
+            }else{
+                map.set(nums[i],i);
+            }
+        }
+        return [];
+    }
+</script>

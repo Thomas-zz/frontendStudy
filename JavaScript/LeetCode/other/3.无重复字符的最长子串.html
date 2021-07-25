@@ -1,0 +1,46 @@
+<script>
+    // var lengthOfLongestSubstring = function (s) {
+    //     let set = new Set();
+    //     // 两个指针标识子串的头和尾
+    //     let i=0,j=0;
+    //     let maxLenght=0;
+
+    //     if(s.length===0){
+    //         return 0;
+    //     }
+    //     for(let i = 0;i<s.length;i++){
+    //         if(!set.has(s[i])){
+    //             set.add(s[i]);
+    //             maxLenght = Math.max(maxLenght,set.size);
+    //         }else{
+    //             while(set.has(s[i])){
+    //                 set.delete(s[j]);
+    //                 j++;
+    //             }
+    //             set.add(s[i]);
+    //         }
+    //     }
+    //     return maxLenght;
+    // };
+
+    var lengthOfLongestSubstring = function (s) {
+        let arr = new Array();
+        let maxLength = 0;
+
+        for (let i = 0; i < s.length; i++) {
+            if (arr.indexOf(s[i]) === -1) {
+                arr.push(s[i]);
+                maxLength = Math.max(maxLength, arr.length);
+            } else {
+                while (arr.indexOf(s[i]) !== -1) {
+                    // 删除数组的第一个元素
+                    arr.shift()
+                }
+                arr.push(s[i]);
+            }
+        }
+        return maxLength;
+    };
+
+    // 这两个方法的思路都是差不多的，都是滑动窗口法
+</script>

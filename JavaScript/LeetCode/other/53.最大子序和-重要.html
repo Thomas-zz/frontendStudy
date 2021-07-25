@@ -1,0 +1,17 @@
+<script>
+    /*
+    动态规划：找到子问题的最优解，解决子问题，然后逐步向上找到问题的一个最优解
+    设当前最大连续子序列和为sum，如果sum+nums[i]>nums[i]，说明可以加到这个子序列中，sum+=nums[i]
+    如果sum+nums[i]<nums[i]，则舍弃这个子序列，重新开始一个新的子序列，sum=nums[i]
+    每次都要比较sum和max的大小，max取最大值
+    */
+    var maxSubArray = function (nums) {
+        let max = nums[0];
+        let sum = 0;
+        for (let i = 0; i < nums.length; i++) {
+            sum = Math.max(sum+nums[i],nums[i]);
+            max = Math.max(sum,max);
+        }
+        return max;
+    };
+</script>

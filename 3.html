@@ -1,0 +1,48 @@
+<script>
+    // let n = 2;
+    // let w = ["1", "2"]
+    // let len = w.length;
+    // let map = new Map();
+    // let count = 0, max = 1;
+    // for (let num of w) {
+    //     if (!map.has(num)) {
+    //         map.set(num, 1);
+    //     } else {
+    //         map.set(num, map.get(num) + 1);
+    //     }
+    // }
+    // for (let arr of map.entries()) {
+    //     let num = arr[0];
+    //     let les = map.get(num + 1);
+    //     let mor = map.get(num - 1);
+    //     count = len - les - mor;
+    //     if (count > max) {
+    //         max = count;
+    //     }
+    //     console.log(arr)
+    // }
+    // console.log(max);
+
+    let n = parseInt(readline());
+    let arr = readline().split(' ')
+    let map = new Map();
+    let count = 0, max = 1;
+    for (let i = 0; i < n; i++) {
+        let numb = parseInt(arr[i]);
+        if (!map.has(numb)) {
+            map.set(numb, 1);
+        } else {
+            map.set(numb, map.get(numb) + 1);
+        }
+    }
+    for (let arr2 of map.entries()) {
+        let num = arr2[0];
+        let les = map.get(num + 1);
+        let mor = map.get(num - 1);
+        count = n - les - mor;
+        if (count > max) {
+            max = count;
+        }
+    }
+    print(max);
+</script>

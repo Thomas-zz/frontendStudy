@@ -1,0 +1,25 @@
+<script>
+    // 其实就是把环拆成两个队列，一个是从0到n-1，另一个是从1到n，然后返回两个结果最大的。
+    var rob = function (nums) {
+        if (nums.length <= 1) {
+            return nums;
+        }
+        if (nums.length === 2) {
+            return Math.max(nums[0], nums[1]);
+        }
+        return Math.max(rangRob(0, nums.length - 2, nums), rangRob(1, nums.length-1, nums));
+    };
+
+    var rangRob = function (start, end, nums) {
+        let first = nums[start];
+        let second = Math.max(nums[start], nums[start + 1]);
+        // 注意这里和打家劫舍I不同，因为边界条件有变，当数组长度为3时for循环不会执行
+        let max = second;
+        for (let i = start + 2; i <= end; i++) {
+            max = Math.max(first + nums[i], second);
+            first = second;
+            second = max;
+        }
+        return max;
+    }
+</script>

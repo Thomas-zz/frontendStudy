@@ -1,0 +1,21 @@
+<script>
+    var rob = function (root) {
+        // 后序遍历
+        const dfs = (root) => {
+            // 用一个数组存储选中此节点和不选中此节点的最大值，并返回给上一级
+            if (root === null) {
+                return [0, 0];
+            }
+            const left = dfs(root.left);
+            const right = dfs(root.right);
+            // 我们设函数f为选中节点的最大值，g为不选中此节点的最大值,o为此节点，l、r为左右节点
+            // 则f(o) = g(l) + g(r)，g(o) = max(f(l), g(l)) + max(f(r), g(r))
+            const selected = root.val + left[1] + right[1];
+            const notSelected = Math.max(left[0], left[1]) + Math.max(right[0], right[1]);
+            return [selected, notSelected];
+        }
+
+        const result = dfs(root);
+        return Math.max(result[0], result[1]);
+    };
+</script>

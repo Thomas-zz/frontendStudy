@@ -1,0 +1,15 @@
+<script>
+    var maxProfit = function (prices) {
+        let min = prices[0];
+        let maxDif = 0;
+        for(let price of prices){
+            if(price-min > maxDif){
+                maxDif = price - min;
+            }
+            if(price < min){
+                min = price;
+            }
+        }
+        return maxDif;
+    };
+</script>

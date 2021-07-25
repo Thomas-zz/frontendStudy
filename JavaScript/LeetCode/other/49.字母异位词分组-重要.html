@@ -1,0 +1,57 @@
+<script>
+    var groupAnagrams = function (strs) {
+        // 1.首先判断数组是否为空
+        if (strs.length === 0) {
+            return strs;
+        }
+
+        let map = new Map();
+        // 2.用for...of可以避免像是str[i][j]这样比较乱的形式
+        for (const str of strs) {
+            // 2.创建一个长度为26，用0填充的数组
+            const characters = Array(26).fill(0);
+
+            for (let i = 0; i < str.length; i++) {
+                // 利用ascii码，a = 97，b = 98...
+                const ascii = str.charCodeAt(i) - 97;
+                characters[ascii]++;
+            }
+            // 注意这里！
+            /*
+            测试用例如果是【"bdddddddddd", "bbbbbbbbbbc"】的话key会相同 会报错
+ 【
+  0, 1, 0, 10, 0, 0, 0, 0,
+  0, 0, 0,  0, 0, 0, 0, 0,
+  0, 0, 0,  0, 0, 0, 0, 0,
+  0, 0
+】
+010100000000000000000000000
+【
+  0, 10, 1, 0, 0, 0, 0, 0,
+  0,  0, 0, 0, 0, 0, 0, 0,
+  0,  0, 0, 0, 0, 0, 0, 0,
+  0,  0
+】
+010100000000000000000000000
+Map(1) {
+  '010100000000000000000000000' => 【 'bdddddddddd', 'bbbbbbbbbbc' 】
+}
+            */
+        //    所以改成.join('.')
+            const key = characters.join(".");
+            if (map.has(key)) {
+                // map.set(key, map.get(key).push(str));
+                map.set(key, [...map.get(key), str]);
+            } else {
+                map.set(key, [str]);
+            }
+        }
+        const result = [];
+        for (const arr of map) {
+            result.push(arr[1]);
+        }
+        return result;
+    };
+    // 另一思路：用质数表示26个字母，把字符串的各个字母相乘，
+    // 这样可保证字母异位词的乘积必定是相等的。其余步骤就是用map存储
+</script>

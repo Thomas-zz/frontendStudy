@@ -1,0 +1,25 @@
+<script>
+    // 方法一：利用js特性
+    var plusOne = function (digits) {
+        // number.MAX_SAFE_INTEGER = 9007199254740991，number能表示的最大整数，超过这个数pasrInt()就不行了
+        // 所以改为用BigInt()
+        // 在数字后面+n也是创建bigint的一种方式 const bigint = 1234567890123456789012345678901234567890n;
+        let number = BigInt(digits.join(''));
+        console.log(number);
+        let result = (number + BigInt(1)).toString().split('').map(n => Number(n));
+        return result;
+    };
+    // 方法二：数学方法
+    var plusOne = function (digits) {
+        for (let i = digits.length - 1; i >= 0; i--) {
+            if (digits[i] !== 9) {
+                digits[i]++;
+                return digits;
+            } else {
+                digits[i] = 0;
+            }
+        }
+        return [1, ...digits];
+    }
+
+</script>

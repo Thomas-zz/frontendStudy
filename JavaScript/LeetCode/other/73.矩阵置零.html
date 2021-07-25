@@ -1,0 +1,53 @@
+<script>
+    var setZeroes = function (matrix) {
+        let firstRowHasZero = false;
+        let firstColHasZero = false;
+        // 1.遍历第一行和第一列，如果第一行和第一列有0，记录下来
+        for (let i = 0; i < matrix.length; i++) {
+            if (matrix[i][0] === 0) {
+                firstColHasZero = true;
+            }
+        }
+
+        for (let i = 0; i < matrix[0].length; i++) {
+            if (matrix[0][i] === 0) {
+                firstRowHasZero = true;
+            }
+        }
+
+        // 遍历数组，将=0的项所在行和列的第一个位置置为0
+        for (let row = 1; row < matrix.length; row++) {
+            for (let col = 1; col < matrix[0].length; col++) {
+                if (matrix[row][col] === 0) {
+                    matrix[row][0] = 0;
+                    matrix[0][col] = 0;
+                }
+            }
+        }
+
+        // 如果这此项所在行或列的第一个项为0，将次项置为零
+        for (let row = 1; row < matrix.length; row++) {
+            for (let col = 1; col < matrix[0].length; col++) {
+                if (matrix[0][col] === 0 || matrix[row][0] === 0) {
+                    matrix[row][col] = 0;
+                }
+            }
+        }
+
+        // 如果firstRowHasZero为true，将第一行都设为0
+        if (firstRowHasZero) {
+            for (let i = 0; i < matrix[0].length; i++) {
+                matrix[0][i] = 0;
+            }
+        }
+
+        // 如果firstColHasZero为true，将第一列都设为0
+        if (firstColHasZero) {
+            for (let i = 0; i < matrix.length; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+
+        return matrix;
+    };
+</script>

@@ -1,0 +1,25 @@
+<script>
+    // 动态规划
+    // 我们要知道到点m,n的路径数f(m,n),则可以先找到它左边和上边的点路径条数，即f(m,n)=f(m-1,n)+f(m,n-1)
+    // 小tip：可以将最左和最上的边上的点路径条数都事先设为1
+    var uniquePaths = function(m,n){
+        // const memo = [];
+        // for(let i = 0; i < m; i++){
+        //     memo[i] = [];
+        // }
+        // map方法将数组的所有成员依次传入参数函数，然后把每一次的执行结果组成一个新数组返回。
+        const memo = new Array(m).fill(0).map(() => new Array(n).fill(0));
+        for(let i = 0; i < n; i++){
+            memo[0][i] = 1;
+        }
+        for(let j = 0; j < m; j++){
+            memo[j][0] = 1;
+        }
+        for(let i = 1; i < m; i++){
+            for(let j = 1; j < n; j++){
+                memo[i][j] = memo[i-1][j] + memo[i][j-1];
+            }
+        }
+        return memo[m - 1][n - 1];
+    }
+</script>

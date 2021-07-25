@@ -1,0 +1,34 @@
+<script>
+    // 递归
+    var reverseList = function (head) {
+        if (!head || !head.next) {
+            return head;
+        }
+        let dummy = head;
+        let flag = dummy.next;
+        dummy.next = null;
+        let flag2;
+        while (flag) {
+            flag2 = flag.next;
+            flag.next = dummy;
+            dummy = flag;
+            flag = flag2;
+        }
+
+        return dummy;
+    };
+
+    // 优化一下
+    var reverseList = function (head) {
+        let dummy = head;
+        let flag = null;
+        while(dummy){
+            let nextTemp = dummy.next;
+            dummy.next = flag;
+            flag = dummy;
+            dummy = nextTemp;
+        }
+
+        return dummy;
+    };
+</script>
