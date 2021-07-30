@@ -26,11 +26,11 @@
 
 缺点：
 
-1. 原型上的属性是共享的
+1. 父类构造函数上的属性是共享的
 2. 子类型在实例化时不能给父类型传参
 3. 继承单一
 
-
+> 在现代引擎中，从性能的角度来看，我们是从对象还是从原型链获取属性都是没区别的。它们（引擎）会记住在哪里找到的该属性，并在下一次请求中重用它。并且引擎足够聪明，一旦有内容更改，它们就会自动更新内部缓存，因此，该优化是安全的。
 
 ## 盗用构造函数
 
@@ -145,24 +145,31 @@ console.log(sup1.age);   //继承了父类函数的属性
 ## 寄生式继承
 
 ```javascript
-function content(obj){
-    function F(){}
-    F.prototype = obj;  //继承了传入的参数
-    return new F();   //返回函数对象
-}
-let sup = new Person();
-//以上是原型式继承，给原型式继承再套个壳子传递参数
-function subObject(obj){
-    var sub = content(obj);
-    sub.name = "gar";
-    return sub;
-}
-var sup2 = subObject(sup);
+// 寄生式继承，有点难理解，建议先把前三个继承方式搞明白
 
-//这个函数经过声明之后就成了可增添属性的对象
-console.log(typeof subObject);   //function
-console.log(typeof sup2);    //object
-console.log(sup2.name);   //"gar",返回了个sub对象，继承了sub属性
+function Parent(){}
+
+let parent = new Parent(); // 创建了一个Parent的实例
+
+function content(obj){  // 传入的是一个对象实例
+  function F(){};
+  F.prototype = obj;
+  return new F();   // 这里返回的是一个函数的实例对象
+}
+// 仔细看，对比上一节不难发现，这本质就是原型式继承，只不过绕了几个弯
+
+// 下面这个函数就是给原型式继承又套了个壳子，可以为子对象增加一些属性和功能
+function childObject(obj){
+  let child = content(obj);  //传入的是一个对象实例
+  child.name = 'xiaoming';  //为新对象添加一些属性
+  return child;
+}
+
+let child1 = childObject(parent);
+
+console.log(typeof childObject);   //function
+console.log(typeof child1);    //object
+console.log(child1.name);    //xiaoming
 ```
 
 **重点：**创建一个实现继承的函数，以某种方式增强对象，然后返回这个对象
@@ -242,11 +249,11 @@ class Animal{
     }
 }
 
-class Rabbit extends Aniaml{
+class Rabbit extends Animal{
     hide(){
         alert(`${this.name} hides!`)
     }
-    stop{
+    stop(){
         super.stop();   //调用父类的stop
         this.hide();
     }

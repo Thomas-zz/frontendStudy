@@ -8,10 +8,12 @@
   - 导入：import xx from './...'
   - 导出：export default XXX
   - 底层是静态引入
+  - ES6 Module输出的是值的引用
 - Common Js
   - 导入：var XXX = require('./...')
   - 导出：module.exports = XXX
   - 底层是动态引入
+  - `require`返回的值是被输出的值的拷贝，模块内部的变化也不会影响这个值
 - CMD
 - ADM
 
@@ -68,7 +70,7 @@ npm install webpack webpack-cli -D
 
 根目录下新建配置文件
 
-```
+```JS
 const path = require('path');  //路径解析
 
 module.exports = {
@@ -235,7 +237,7 @@ loader的执行顺序是从下到上，从右到左
 
 ### 使用plugins
 
-> 插件，可以再webpack运行到某个时刻的时候，帮我们做某些事
+> 插件，可以在webpack运行到某个时刻的时候，帮我们做某些事
 
 #### HtmlWebpackPlugin
 
@@ -752,3 +754,170 @@ module.exports = (env) => {
 ```
 
 环境变量能赋值，默认值为true
+
+## webpack实战配置
+
+### Library的打包
+
+当我们写库函数的时候，如果想要我们的库能够被其他人引入使用，我们需要通过 [`output.library`](https://webpack.docschina.org/configuration/output/#outputlibrary) 配置项暴露从入口导出的内容。
+
+```js
+  const path = require('path');
+
+  module.exports = {
+    entry: './src/index.js',
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'webpack-numbers.js',
+      library: "webpackNumbers",   //看这里
+    },
+  };
+
+```
+
+然而它只能通过被 script 标签引用而发挥作用，它不能运行在 CommonJS、AMD、Node.js 等环境中。
+
+设置其type配置项
+
+```diff
+ const path = require('path');
+
+ module.exports = {
+   entry: './src/index.js',
+   output: {
+     ...
+-    library: 'webpackNumbers',
++    library: {
++      name: 'webpackNumbers',
++      type: 'umd',
++    },
+   },
+ };
+```
+
+现在 webpack 将打包一个库，其可以与 CommonJS、AMD 以及 script 标签使用。
+
+#### 外部化lodash
+
+当我们写的库需要使用别的依赖如lodash，我们将lodash打包到自己的库中，但我们的项目中可能已经引入了lodash，这样就重复导入了。
+
+这可以使用 `externals` 配置来完成：
+
+**webpack.config.js**
+
+```diff
+  const path = require('path');
+
+  module.exports = {
+    entry: './src/index.js',
+    output: {
+      ...
+    },
++   externals: {
++     lodash: {
++       commonjs: 'lodash',
++       commonjs2: 'lodash',
++       amd: 'lodash',
++       root: '_',
++     },
++   },
+  };
+```
+
+这意味着你的 library 需要一个名为 `lodash` 的依赖，这个依赖在 consumer 环境中必须存在且可用。
+
+#### 最终步骤 
+
+遵循 [生产环境](https://webpack.docschina.org/guides/production) 指南中提到的步骤，来优化生产环境下的输出结果。那么，我们还需要将生成 bundle 的文件路径，添加到 `package.json` 中的 `main` 字段中。
+
+**package.json**
+
+```json
+{
+  ...
+  "main": "dist/webpack-numbers.js",
+  ...
+}
+```
+
+或者，按照这个 [指南](https://github.com/dherman/defense-of-dot-js/blob/master/proposal.md#typical-usage)，将其添加为标准模块：
+
+```json
+{
+  ...
+  "module": "src/index.js",
+  ...
+}
+```
+
+### PWA
+
+https://webpack.docschina.org/guides/progressive-web-application/#root
+
+>  渐进式网络应用程序(progressive web application - PWA）,通过使用名为 [Service Workers](https://developers.google.com/web/fundamentals/primers/service-workers/) 的 web 技术来实现在**离线(offline)**时应用程序能够继续运行功能
+
+> Service worker运行在worker上下文，因此它不能访问DOM。相对于驱动应用的主JavaScript线程，它运行在其他线程中，所以不会造成阻塞。它设计为完全异步，同步API（如[XHR](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest)和[localStorage (en-US)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API)）不能在service worker中使用。
+>
+> 出于安全考量，Service workers只能由HTTPS承载，毕竟修改网络请求的能力暴露给中间人攻击会非常危险。在Firefox浏览器的[用户隐私模式](https://support.mozilla.org/zh-CN/kb/隐私浏览)，Service Worker不可用。
+
+
+
+### 使用devServer实现请求转发
+
+`devServer.proxy` 
+
+当我们在**开发环境**中调试的时候，代理某些URL可能会很有用，我们就不需要逐条去修改请求里的地址
+
+**webpack.config.js**
+
+```javascript
+module.exports = {
+  //...
+  devServer: {
+    proxy: {
+      '/api': 'http://localhost:3000',
+    },
+  },
+};
+```
+
+现在，对 `/api/users` 的请求会将请求代理到 `http://localhost:3000/api/users`。
+
+如果不希望传递`/api`，则需要重写路径：
+
+**webpack.config.js**
+
+```javascript
+module.exports = {
+  //...
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        pathRewrite: { '^/api': '' },
+      },
+    },
+  },
+};
+```
+
+默认情况下，将不接受在 HTTPS 上运行且证书无效的后端服务器。 如果需要，可以这样修改配置：
+
+**webpack.config.js**
+
+```javascript
+module.exports = {
+  //...
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'https://other-server.example.com',
+        secure: false,
+      },
+    },
+  },
+};
+```
+
+
+有的网站对Origin做了限制，防止爬虫，将changeOrigin` 设置为 `true可以突破这个限制
