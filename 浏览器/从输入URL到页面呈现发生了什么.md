@@ -109,7 +109,7 @@
 
 1. 一个 DOM 元素的几何属性变化，常见的几何属性有`width`、`height`、`padding`、`margin`、`left`、`top`、`border` 等等, 这个很好理解。
 2. 使 DOM 节点发生`增减`或者`移动`。
-3. 读写 `offset`族、`scroll`族和`client`族属性的时候，浏览器为了获取这些值，需要进行回流操作。
+3. 读写 `offset`族、`scroll`族和 族属性的时候，浏览器为了获取这些值，需要进行回流操作。
 4. 调用 `window.getComputedStyle` 方法。
 
 #### 回流过程

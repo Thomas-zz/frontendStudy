@@ -921,3 +921,257 @@ module.exports = {
 
 
 有的网站对Origin做了限制，防止爬虫，将changeOrigin` 设置为 `true可以突破这个限制
+
+### 单页面路由
+
+当使用 [HTML5 History API](https://developer.mozilla.org/en-US/docs/Web/API/History) 时, 所有的 `404` 请求都会响应 `index.html` 的内容。 将 `devServer.historyApiFallback` 设为 `true`开启：
+
+**webpack.config.js**
+
+```javascript
+module.exports = {
+  //...
+  devServer: {
+    historyApiFallback: true,
+  },
+};
+```
+
+通过传递对象，可以使用配置选项诸如 `rewrites`:
+
+**webpack.config.js**
+
+```javascript
+module.exports = {
+  //...
+  devServer: {
+    historyApiFallback: {
+      rewrites: [
+        { from: /^\/$/, to: '/views/landing.html' },
+        { from: /^\/subpage/, to: '/views/subpage.html' },
+        { from: /./, to: '/views/404.html' },
+      ],
+    },
+  },
+};
+```
+
+### 代码规范
+
+ESLint
+
+### webpack性能优化
+
+1. 跟上技术的迭代（Node, Npm, Yarn）
+
+2. 在尽可能少的模块上应用loader（如不对node_modules里的文件使用babel-loader，设置exclude/include）
+
+3. Plugin 尽可能精简并确保可靠（如开发模式下不用压缩代码，使用官方认可，推荐的插件）
+
+4. 配置resolve
+
+   1. ```
+      [string] = ['.js', '.json', '.wasm']
+      ```
+
+      尝试按顺序解析这些后缀名。如果有多个文件有相同的名字，但后缀名不同，webpack 会解析列在数组首位的后缀的文件 并跳过其余的后缀。
+
+      ps.不要配置太长，解析会有性能损耗
+
+   2. 现在，替换“在导入时使用相对路径”这种方式，就像这样：
+
+      ```
+      import Utility from '../../utilities/utility';
+      ```
+
+      你可以这样使用别名：
+
+      ```
+      import Utility from 'Utilities/utility';
+      ```
+
+      也可以在给定对象的键后的末尾添加 `$`，以表示精准匹配：
+
+   ```js
+   resolve: {
+       extensions: ['.js', '.json', '.wasm'], 
+       alias: {
+         Utilities: path.resolve(__dirname, 'src/utilities/'),
+         Templates: path.resolve(__dirname, 'src/templates/'),
+       },
+   },
+   ```
+
+5. 使用DllPlugin拆分bundles，大幅提高打包速度
+
+   目标：
+
+   - 第三方模块只打包一次
+   - 之后引入第三方模块的时候，要去使用dll文件
+
+   > 我们建议 DllPlugin 只在 `entryOnly: true` 时使用，否则 DLL 中的 tree shaking 将无法工作，因为所有 exports 均可使用。
+
+   1. `DllPlugin`此插件用于在单独的 webpack 配置中创建一个 dll-only-bundle。 此插件会生成一个名为 `manifest.json` 的文件，这个文件是用于让 [`DllReferencePlugin`](https://webpack.docschina.org/plugins/dll-plugin/#dllreferenceplugin) 能够映射到相应的依赖上。
+   2. `DllReferencePlugin`会把 dll-only-bundles 引用到需要的预编译的依赖中。
+
+6. thread-loader, parallel-webpack, happypack 多进程打包
+
+7. 合理使用sourceMap，开发和生产环境不同的sourceMap会影响打包速度
+
+8. 结合stats分析打包结果
+
+9. 开发环境内存编译，如WebpackDevServer
+
+### 多页面打包
+
+1. 修改entry路径
+
+   ```js
+   entry: {
+   		index: './src/index.js',
+   		list: './src/list.js',
+   		detail: './src/detail.js',
+   	},
+   ```
+
+2. 增加plugins
+
+   ```js
+   	new HtmlWebpackPlugin({
+   		template: 'src/index.html',
+   		filename: `${item}.html`,
+   		chunks: ['runtime', 'vendors', item]
+   	})
+   ```
+
+3. 自动化配置
+
+   ```js
+   const makePlugins = (configs) => {
+   	const plugins = [
+   		new CleanWebpackPlugin(['dist'], {
+   			root: path.resolve(__dirname, '../')
+   		})
+   	];
+   	Object.keys(configs.entry).forEach(item => {
+   		plugins.push(
+   			new HtmlWebpackPlugin({
+   				template: 'src/index.html',
+   				filename: `${item}.html`,
+   				chunks: ['runtime', 'vendors', item]
+   			})
+   		)
+   	});
+   	const files = fs.readdirSync(path.resolve(__dirname, '../dll'));
+   	files.forEach(file => {
+   		if(/.*\.dll.js/.test(file)) {
+   			plugins.push(new AddAssetHtmlWebpackPlugin({
+   				filepath: path.resolve(__dirname, '../dll', file)
+   			}))
+   		}
+   		if(/.*\.manifest.json/.test(file)) {
+   			plugins.push(new webpack.DllReferencePlugin({
+   				manifest: path.resolve(__dirname, '../dll', file)
+   			}))
+   		}
+   	});
+   	return plugins;
+   }
+   
+   configs.plugins = makePlugins(configs);
+   ```
+
+
+
+
+## Webpack底层原理及脚手架工具分析
+
+### 自定义loader
+
+自定义loader可以帮助我们对源代码进行包装
+
+- 同步loaders
+
+```
+module.exports = function (content, map, meta) {
+  this.callback(null, someSyncOperation(content), map, meta);
+  return; // 当调用 callback() 函数时，总是返回 undefined
+};
+```
+
+- 异步loaders
+
+```
+module.exports = function (content, map, meta) {
+  var callback = this.async();
+  someAsyncOperation(content, function (err, result) {
+    if (err) return callback(err);
+    callback(null, result, map, meta);
+  });
+};
+```
+
+建议使用异步loaders，
+
+### 自定义Plugin
+
+1. 创建一个类
+
+   ```js
+   class CopyrightWebpackPlugin {
+      //构造函数，可以传参   
+       constructor(contain){
+           
+       }
+       
+   	apply(compiler) {
+   
+           // 同步执行
+   		compiler.hooks.compile.tap('CopyrightWebpackPlugin', (compilation) => {
+   			console.log('compiler');
+   		})
+   
+           // 异步执行
+           // hook是一个钩子，上面有webpack打包时的各个阶段   
+   		compiler.hooks.emit.tapAsync('CopyrightWebpackPlugin', (compilation, cb) => {
+   			debugger;
+   			compilation.assets['copyright.txt']= {
+   				source: function() {
+   					return 'copyright by dell lee'
+   				},
+   				size: function() {
+   					return 21;
+   				}
+   			};
+   			cb();
+   		})
+   	}
+   }
+   
+   module.exports = CopyrightWebpackPlugin;
+   ```
+
+   
+
+2. 引入这个plugin并使用
+
+   ```js
+   const CopyRightWebpackPlugin = require('./plugins/copyright-webpack-plugin');
+   
+   plugins: [
+   		new CopyRightWebpackPlugin()
+   	],
+   ```
+
+3. 调试webpack
+
+   ```json
+     "scripts": {
+       "debug": "node --inspect --inspect-brk node_modules/webpack/bin/webpack.js",
+       "build": "webpack"
+     },
+   ```
+
+   代码中加入`debugger;`来为程序打上断点。在浏览器中查看调试信息
+
+![image-20210809202832886](E:\frontendStudy\Webpack\WebPack.assets\image-20210809202832886.png)

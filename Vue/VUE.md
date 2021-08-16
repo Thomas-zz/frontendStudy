@@ -74,3 +74,29 @@ https://segmentfault.com/a/1190000011381906
 </html>
 ```
 
+
+
+## reactive理解
+
+- vue3中提供的实现响应式数据的方法
+- 在vue2 中响应式数据是通过defineProperty来实现的
+- 在vue3中响应式数据是通过ES6的Proxy来实现的
+
+注意点：
+
+- 参数必须是对象（json/arr）
+- 如果给reactive传递了其他对象
+  - 默认情况下修改对象，界面不会自动更新
+  - 如果想更新，可以通过重新赋值的方式
+
+
+
+## ref理解
+
+为我们创建了一个响应式引用
+
+`ref(18) -> reactive({value: 18})`
+
+Vue通过当前数据的__v_ref属性来判断是否是ref数据，如果是，就自动添加.value
+
+通过`import {isRef, isReactive} form 'vue' `来引入依赖，判断是否是ref或reactive
