@@ -2,6 +2,10 @@
 
 <img src="E:\frontendStudy\浏览器\从输入URL到页面呈现发生了什么.assets\16f080b095268038" alt="img" style="zoom:80%;" />
 
+![img](E:\frontendStudy\浏览器\从输入URL到页面呈现发生了什么.assets\v2-c7d4b5aca66560365593f57385ce9fa9_720w.jpg)
+
+MSL是Maximum Segment Lifetime英文的缩写，中文可以译为“报文最大生存时间”
+
 ## 从输入URL到页面呈现发生了什么？——网页渲染篇
 
 ### 构建DOM树

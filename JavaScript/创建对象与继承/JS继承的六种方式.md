@@ -55,6 +55,9 @@
         console.log(child1.name); // xiaoming
         console.log(child1.colors); // ["red", "blue", "green", "yellow"]
         console.log(child2.colors); // ["red", "blue", "green"]
+
+        // 没有继承父类原型的属性，必须在构造函数中定义方法，因此所有类型都只能使用构造函数模式
+        child1.getName();   //error
 ```
 
 **重点：**用call()和apply()方法以新创建的对象为上下文执行构造函数
@@ -106,6 +109,19 @@
 3. 保留了instanceof操作符和isPrototypeOf()方法识别合成对象的能力
 
 缺点：调用了两次父类构造函数（耗内存）
+
+```js
+/*
+new是分为三个步骤：
+1. 创建一个空对象 Child.prototype = {};
+2. 空对象的__proto__指向Parent的原型对象 Child.prototype.proto = Parent.prototype
+   ({}.proto = Parent.prototype)
+3. 将构造函数的this指针替换 Parent.call({});
+最后我们的prototype就成功指向新对象啦
+*/ 
+```
+
+
 
 
 
@@ -227,9 +243,29 @@ function inherit(superClass, subClass) {
     subClass.prototype = e;
     subClass.prototype.constructor = subClass;
 }
+
+// Object.create()能帮我们实现content()的作用
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
 ```
 
 ![image-20210426105858555](E:\frontendStudy\JavaScript\创建对象与继承\JS继承的六种方式.assets\image-20210426105858555.png)
+
+**此图有问题！**构造函数的 `[[prototype]]` 指向 `Function.prototype` ，`Function.prototype.__proto__` 指向 `Object.prototype`
+
+```js
+function A(){
+  this.name = 'A';
+}
+
+let a = new A();
+
+console.log(Object.getPrototypeOf(a) === A.prototype)   // true
+console.log(Object.getPrototypeOf(A) === Function.prototype)   //true
+console.log(Object.getPrototypeOf(Function.prototype) === Object.prototype)   //true
+```
+
+
 
 ## 类继承
 

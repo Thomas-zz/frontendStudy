@@ -100,3 +100,11 @@ https://segmentfault.com/a/1190000011381906
 Vue通过当前数据的__v_ref属性来判断是否是ref数据，如果是，就自动添加.value
 
 通过`import {isRef, isReactive} form 'vue' `来引入依赖，判断是否是ref或reactive
+
+## 递归监听和非递归监听
+
+- reactive和ref都是递归监听
+- shallowReactive和shallowReactive是非递归监听，性能消耗会比较小
+- triggerRef(ref)  传入更新的ref类型数据，会主动触发界面更新
+
+<img src="E:\frontendStudy\Vue\VUE.assets\image-20210816213151278.png" alt="image-20210816213151278" style="zoom:67%;" />
