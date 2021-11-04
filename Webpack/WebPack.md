@@ -484,7 +484,7 @@ if (module.hot) {
 
 3. 但这样我们两个配置文件中会有大量重复的配置，且这部分配置一个修改另一个也要手动修改，所以我们可以把它们的公共部分提取出来，命名为`webpack.common.js`
 
-4. 合并`webpack.common.js`需要用到一个插件叫`webpack=merge`，命令行下载`npm install webpack-merge -D`
+4. 合并`webpack.common.js`需要用到一个插件叫`webpack-merge`，命令行下载`npm install webpack-merge -D`
 
 5. 在`webpack.dev.js`和`webpack.prod.js`中导入`webpack.common.js`并合并，如
 

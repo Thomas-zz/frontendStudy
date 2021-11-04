@@ -32,7 +32,7 @@ let promise = new Promise(function(resolve, reject) {
   - value   `resolve(value)` 被调用时
   - error   `reject(error)` 被调用时
 
-![image-20210802155252266](E:\frontendStudy\JavaScript\Promise,async&await\Promise.assets\image-20210802155252266.png)
+![image-20210802155252266](E:\frontendStudy\JavaScript\异步编程\Promise.assets\image-20210802155252266.png)
 
 > executor 只能调用一个 `resolve` 或一个 `reject`。任何状态的更改都是最终的。
 >
@@ -108,7 +108,7 @@ Promise链与异常处理
 
 这是一个完整的流程图：
 
-<img src="E:\frontendStudy\JavaScript\Promise,async&amp;await\Promise.assets\image-20210802160840435.png" alt="image-20210802160840435" style="zoom:80%;" />
+<img src="E:\frontendStudy\JavaScript\异步编程\Promise.assets\image-20210802160840435.png" alt="image-20210802160840435" style="zoom:80%;" />
 
 
 
@@ -250,7 +250,7 @@ Promise.all(requests)
 `Promise.allSettled` 等待所有的 promise 都被 settle，无论结果如何。结果数组具有：
 
 - `{status:"fulfilled", value:result}` 对于成功的响应，
-- `{status:"rejected", reason:error}` 对于 error。
+- `{status:"rejected", reason:error}` 对于 error的响应。
 
 ```js
 let urls = [
@@ -274,7 +274,13 @@ Promise.allSettled(urls.map(url => fetch(url)))
 
 ### Promise.race
 
-与 `Promise.all` 类似，但只等待第一个 settled 的 promise 并获取其结果（或 error）。
+方法返回一个 promise，一旦迭代器中的某个promise解决或拒绝，返回的 promise就会解决或拒绝。
+
+### Promise.any
+
+用于返回第一个成功的`promise`
+
+接收一个[`Promise`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise)可迭代对象，只要其中的一个 `promise` 成功，就返回那个已经成功的 `promise` 。如果可迭代对象中没有一个 `promise` 成功（即所有的 `promises` 都失败/拒绝），就返回一个失败的 `promise `和[`AggregateError`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/AggregateError)类型的实例
 
 ### Promise.resolve/reject
 
@@ -284,4 +290,33 @@ Promise.allSettled(urls.map(url => fetch(url)))
 - `Promise.reject(error)` 用 `error` 创建一个 rejected 的 promise。
 
 用于当前操作结果封装进promise，以满足期望返回一个promise的需求
+
+
+
+# Generator
+
+> 生成器是一个带`星号`的"函数"(注意：它并不是真正的函数)，可以通过`yield`关键字`暂停执行`和`恢复执行`的
+
+# async
+
+> MDN 的定义: async 是一个通过异步执行并隐式返回 Promise 作为结果的函数。
+
+```js
+async function test() {
+  console.log(100)
+  let x = await 200
+  console.log(x)
+  console.log(200)
+}
+console.log(0)
+test()
+console.log(300)
+
+// 答案
+0
+100
+300
+200
+200
+```
 
