@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <p>虚拟代理实现图片懒加载,将网速调慢刷新，可以看到图片要等好一会才能出现</p>
+  <p>这里占位图大小其实不合适，仅做练习使用，可以看到占位图先于图片出来</p>
+</body>
+<script>
+  let myImage = (function () {
+    let imgNode = document.createElement('img')
+    document.body.appendChild(imgNode)
+
+    return {
+      setSrc: function (src) {
+        imgNode.src = src
+      }
+    }
+  })()
+
+  let proxyImage = (function () {
+    let img = new Image
+    img.onload = function () {
+      myImage.setSrc(this.src)
+    }
+    return {
+      setSrc: function (src) {
+        myImage.setSrc('./loading.jpg')
+        img.src = src
+      }
+    }
+  })()
+
+  proxyImage.setSrc('https://img1.baidu.com/it/u=359638371,2587777304&fm=253&fmt=auto&app=120&f=JPEG?w=690&h=388')
+</script>
+
+</html>
