@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{
+      padding: 0;
+      margin: 0;
+    }
+    main{
+      /* 1. 滚动贴合的方向 
+            贴合方式 mandatory表示强制滚动;proximity表示贴合点小于一定距离才贴合
+            scroll-padding: 设置贴合间距
+      */
+
+      scroll-snap-type: y mandatory;
+
+      height: 100vh;
+      overflow: scroll;
+    }
+    /* 清除滚动条宽高，避免影响布局 */
+    main::-webkit-scrollbar{
+      width: 0;
+      height: 0;
+    }
+    section{
+      /* 2. 子元素的贴合对齐方式 start center end */
+      scroll-snap-align: start;
+
+      text-align: center;
+      line-height: 100vh;
+      font-size: 80px;
+      height: 100vh;
+      width: 100vw;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section style="background-color: #dfd0fa;">页面内容1</section>
+    <section style="background-color: #ffd662;">页面内容2</section>
+    <section style="background-color: #1cd66c;">页面内容3</section>
+    <section style="background-color: #22a7f2;">页面内容4</section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- <script type="text/javascript" src="myAxios.js"></script> -->
+  <script type="text/javascript" src="myAxios2.js"></script>
+</head>
+
+<body>
+  <button class="btn1">点我发送请求myAxios1</button>
+  <button class="btn2">点我发送请求myAxios2</button>
+</body>
+<script>
+  document.querySelector('.btn1').onclick = function () {
+    // 分别使用以下方法调用，查看myaxios的效果
+    axios({
+      method: 'get',
+      url: 'http://localhost:5000/getTest'
+    }).then(res => {
+      console.log('getAxios 成功响应', res);
+    })
+  }
+  document.querySelector('.btn2').onclick = function () {
+    axios.get('http://localhost:5000/getTest')
+      .then(res => {
+        console.log('getAxios 成功响应', res);
+      })
+  }
+</script>
+
+</html>
