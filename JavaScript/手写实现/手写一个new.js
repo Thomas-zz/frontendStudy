@@ -41,3 +41,13 @@ student2.__proto__ === Student.prototype; // true
 // 用ES5 则是：
 Object.getPrototypeOf(student1) === Student.prototype; // true
 Object.getPrototypeOf(student2) === Student.prototype; // true
+
+// 另一种写法
+function new_object(func, ...args){
+  if(typeof func !== 'function'){
+    throw "应传入一个函数"
+  }
+  let newObj = Object.create(func.prototype)
+  let res = func.apply(newObj, args);
+  return res instanceof Object ? res : newObj
+}

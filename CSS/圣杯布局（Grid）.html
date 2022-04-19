@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    header,
+    footer {
+      text-align: center;
+      width: 100%;
+      background-color: #ffcd42;
+    }
+
+    .text {
+      text-align: center;
+      color: #fff;
+      font-size: 20px;
+      line-height: 30px;
+    }
+
+    body{
+      display: grid;
+    }
+
+    header{
+      grid-row: 1;
+      grid-column: 1/5;
+    }
+
+    .middle {
+      background: #22a7f2;
+      grid-row: 2;
+      grid-column: 2/4;
+    }
+
+    .left {
+      background: #12d36a;
+      grid-row: 2;
+      grid-column: 1/2;
+    }
+
+    .right {
+      background: #dd001b;
+      grid-row: 2;
+      grid-column: 4/5;
+    }
+
+    footer{
+      grid-row: 3;
+      grid-column: 1/5;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="text">head</header>
+  <div class="left text">left</div>
+  <div class="middle text">middle</div>
+  <div class="right text">right</div>
+  <footer class="text">footer</footer>
+</body>
+
+</html>

@@ -75,7 +75,7 @@ const path = require('path');  //路径解析
 
 module.exports = {
   mode: 'production',   //打包模式，默认为production，压缩代码。development 不压缩代码
-  etry: './index.js',  //入口文件
+  entry: './index.js',  //入口文件
   /*是对下面这句的简写
     main: './index.js'
   */
@@ -299,7 +299,7 @@ module.exports = {
 
 - eval速度最快，但不一定准确
 - cheap只告诉我们错误在哪一行，不会指出在哪一列
-- module不止管我们也业务代码，也会管第三方模块
+- module不止管我们业务代码，也会管第三方模块
 - inline不单独生成一个.map文件，在打包好的js中以base64位映射
 
 配置建议：
@@ -1174,4 +1174,4 @@ module.exports = function (content, map, meta) {
 
    代码中加入`debugger;`来为程序打上断点。在浏览器中查看调试信息
 
-![image-20210809202832886](E:\frontendStudy\Webpack\WebPack.assets\image-20210809202832886.png)
+![image-20210809202832886](E:\frontendStudy\Webpack\WebPack.assets\image-20210809202832886.png) 

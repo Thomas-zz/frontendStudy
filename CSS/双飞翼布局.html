@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+
+    header{
+      background-color: aqua;
+      text-align: center;
+    }
+
+    footer{
+      background-color: bisque;
+      text-align: center;
+    }
+
+    main{
+      min-width: 900px;
+    }
+
+    main .inner{
+      margin: 0 300px;
+    }
+
+    .middle{
+      float: left;
+      width: 100%;
+      background-color: #3370ff;
+    }
+
+    .left{
+      float: left;
+      width: 300px;
+      background-color: #1cd66c;
+      margin-left: -100%;
+    }
+
+    .right{
+      float: left;
+      width: 300px;
+      background-color: #ffcb3c;
+      margin-left: -300px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>这里是页头</header>
+  <main>
+    <div class="middle">
+      <div class="inner">内容
+        <div>erer</div>
+      </div>
+    </div>
+    <div class="left">左栏</div>
+    <div class="right">右栏</div>
+  </main>
+  <footer>这里是页脚</footer>
+</body>
+
+</html>

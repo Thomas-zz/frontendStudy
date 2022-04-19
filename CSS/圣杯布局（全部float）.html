@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    header,
+    footer {
+      text-align: center;
+      width: 100%;
+      background-color: #ffcd42;
+    }
+
+    .text {
+      text-align: center;
+      color: #fff;
+      font-size: 20px;
+      line-height: 30px;
+    }
+
+    .container {
+      overflow: hidden;
+      /* 给左右两栏预留位置 */
+      padding: 0 300px;
+      /* 浏览器缩放会挤压容器，要给container设置最小宽度，不然布局会变形
+        这个最下宽度就是左栏（padding-left）的大小
+      */
+      min-width: 300px;
+    }
+
+    .left,
+    .middle,
+    .right {
+      position: relative;
+      float: left;
+    }
+
+    .middle {
+      width: 100%;
+      background: #22a7f2;
+    }
+
+    .left {
+      width: 300px;
+      background: #12d36a;
+      margin-left: -100%;
+      left: -300px;
+      padding-bottom: 9999px;
+      margin-bottom: -9999px;
+    }
+
+    .right {
+      width: 300px;
+      background: #dd001b;
+      margin-left: -300px;
+      right: -300px;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="text">head</header>
+  <main class="container">
+    <div class="middle text">middle
+      <div>block</div>
+    </div>
+    <div class="left text">left</div>
+    <div class="right text">right</div>
+  </main>
+  <footer class="text">footer</footer>
+</body>
+
+</html>
